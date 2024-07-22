@@ -3,14 +3,15 @@ A class for each piece.
 A piece consists of exactly 4 blocks.
 Pieces can behave differently in certain situations so they will be differentiated by a switch case.
 """
+from block import *
 
 # Constants
 O_PIECE = (0, "yellow")
 I_PIECE = (1, "deep sky blue")
-T_PIECE = (2, "purple")
-L_PIECE = (3, "orange red")
+T_PIECE = (2, "magenta")
+L_PIECE = (3, "dark orange")
 J_PIECE = (4, "blue")
-S_PIECE = (5, "green")
+S_PIECE = (5, "chartreuse")
 Z_PIECE = (6, "red")
 START_X = 4
 START_Y = 1
@@ -68,3 +69,18 @@ class Piece:
         self.color = type[1]
         self.orientation = 0
         self.blocks = []
+
+    # Draw the piece on the canvas
+    def draw(self):
+        block = Block(self.canvas, self.x, self.y, self.color)
+        block.draw()
+        self.blocks.append(block)
+        for i in range(3):
+            otIndex = (self.type * 4) + self.orientation
+            x = self.x + OT[otIndex][i][0]
+            y = self.y + OT[otIndex][i][1]
+            block = Block(self.canvas, x, y, self.color)
+            self.blocks.append(block)
+        for block in self.blocks:
+            block.draw()
+        return None

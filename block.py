@@ -11,7 +11,7 @@ GRID_WIDTH = 10
 
 class Block:
 
-    # Initialize the ball object
+    # Initialize a block
     def __init__(self, canvas, x, y, color):
         self.canvas = canvas
         self.x = x
@@ -19,7 +19,7 @@ class Block:
         self.color = color
         self.block = ""
 
-    # Draw the block on teh canvas
+    # Draw the block on the canvas
     def draw(self):
         x1 = self.x * BLOCK_WIDTH
         y1 = self.y * BLOCK_WIDTH

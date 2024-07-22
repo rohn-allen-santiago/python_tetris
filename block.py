@@ -36,6 +36,12 @@ class Block:
         self.y += 1
         return True
 
+    # Checks if a block can move down
+    def can_move_down(self):
+        if self.y >= GRID_HEIGHT - 1:
+            return False
+        return True
+
     # Moves block left one position if possible
     def move_left(self):
         if self.x <= 0:
@@ -44,12 +50,24 @@ class Block:
         self.x -= 1
         return True
 
+    # Checks if a block can move left
+    def can_move_left(self):
+        if self.x <= 0:
+            return False
+        return True
+
     # Moves block right one position if possible
     def move_right(self):
         if self.x >= GRID_WIDTH - 1:
             return False
         self.canvas.move(self.block, BLOCK_WIDTH, 00)
         self.x += 1
+        return True
+
+    # Checks if a block cna move right
+    def can_move_right(self):
+        if self.x >= GRID_WIDTH - 1:
+            return False
         return True
 
     # Delete the block from teh canvas

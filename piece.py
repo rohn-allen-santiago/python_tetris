@@ -92,3 +92,21 @@ class Piece:
         for block in self.blocks:
             block.move_down()
         return True
+
+    # Moves the piece left a position if possible
+    def move_left(self):
+        for block in self.blocks:
+            if not block.can_move_left():
+                return False
+        for block in self.blocks:
+            block.move_left()
+        return True
+
+    # Moves the piece right a position if possible
+    def move_right(self):
+        for block in self.blocks:
+            if not block.can_move_right():
+                return False
+        for block in self.blocks:
+            block.move_right()
+        return True

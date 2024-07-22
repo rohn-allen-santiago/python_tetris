@@ -14,7 +14,7 @@ J_PIECE = (4, "blue")
 S_PIECE = (5, "chartreuse")
 Z_PIECE = (6, "red")
 START_X = 4
-START_Y = 1
+START_Y = 2
 
 # Table for piece orientation lookup.
 # Orientation numbers represent different positions moving clockwise
@@ -73,7 +73,6 @@ class Piece:
     # Draw the piece on the canvas
     def draw(self):
         block = Block(self.canvas, self.x, self.y, self.color)
-        block.draw()
         self.blocks.append(block)
         for i in range(3):
             otIndex = (self.type * 4) + self.orientation
@@ -84,3 +83,12 @@ class Piece:
         for block in self.blocks:
             block.draw()
         return None
+
+    # Moves the piece down a position if possible
+    def move_down(self):
+        for block in self.blocks:
+            if not block.can_move_down():
+                return False
+        for block in self.blocks:
+            block.move_down()
+        return True

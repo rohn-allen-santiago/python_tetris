@@ -114,6 +114,20 @@ class Piece:
         self.y += 1
         return True
 
+    # Rotates the piece clockwise
+    def rotate_cw(self):
+        self.orientation += 1
+        self.delete()
+        self.draw()
+        return None
+
+    # Rotates the piece counterclockwise
+    def rotate_ccw(self):
+        self.orientation -= 1
+        self.delete()
+        self.draw()
+        return None
+
     # Deletes a piece
     def delete(self):
         for block in self.blocks:

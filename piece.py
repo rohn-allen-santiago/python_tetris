@@ -110,3 +110,9 @@ class Piece:
         for block in self.blocks:
             block.move_right()
         return True
+
+    # Deletes a piece
+    def delete(self):
+        for block in self.blocks:
+            block.delete()
+        return None

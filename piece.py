@@ -75,7 +75,7 @@ class Piece:
         block = Block(self.canvas, self.x, self.y, self.color)
         self.blocks.append(block)
         for i in range(3):
-            otIndex = (self.type * 4) + self.orientation
+            otIndex = (self.type * 4) + (self.orientation % 4)
             x = self.x + OT[otIndex][i][0]
             y = self.y + OT[otIndex][i][1]
             block = Block(self.canvas, x, y, self.color)
@@ -91,6 +91,7 @@ class Piece:
                 return False
         for block in self.blocks:
             block.move_down()
+        self.x += 1
         return True
 
     # Moves the piece left a position if possible
@@ -100,6 +101,7 @@ class Piece:
                 return False
         for block in self.blocks:
             block.move_left()
+        self.y -= 1
         return True
 
     # Moves the piece right a position if possible
@@ -109,10 +111,12 @@ class Piece:
                 return False
         for block in self.blocks:
             block.move_right()
+        self.y += 1
         return True
 
     # Deletes a piece
     def delete(self):
         for block in self.blocks:
             block.delete()
+        self.blocks.clear()
         return None

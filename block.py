@@ -29,11 +29,12 @@ class Block:
         return None
 
     # Moves block down a position on the grid
-    def fall(self):
-        if self.y < 19:
-            self.canvas.move(self.block, 0, BLOCK_WIDTH)
-            self.y += 1
-        return None
+    def move_down(self):
+        if self.y >= GRID_HEIGHT - 1:
+            return False
+        self.canvas.move(self.block, 0, BLOCK_WIDTH)
+        self.y += 1
+        return True
 
     # Moves block left one position if possible
     def move_left(self):
@@ -50,3 +51,8 @@ class Block:
         self.canvas.move(self.block, BLOCK_WIDTH, 00)
         self.x += 1
         return True
+
+    # Delete the block from teh canvas
+    def delete(self):
+        self.canvas.delete(self.block)
+        return None

@@ -6,6 +6,8 @@ Blocks can change the speed they are falling at
 
 # Constants
 BLOCK_WIDTH = 50
+GRID_HEIGHT = 20
+GRID_WIDTH = 10
 
 class Block:
 
@@ -31,5 +33,20 @@ class Block:
         if self.y < 19:
             self.canvas.move(self.block, 0, BLOCK_WIDTH)
             self.y += 1
-            print(self.y)
         return None
+
+    # Moves block left one position if possible
+    def move_left(self):
+        if self.x <= 0:
+            return False
+        self.canvas.move(self.block, -1 * BLOCK_WIDTH, 0)
+        self.x -= 1
+        return True
+
+    # Moves block right one position if possible
+    def move_right(self):
+        if self.x >= GRID_WIDTH - 1:
+            return False
+        self.canvas.move(self.block, BLOCK_WIDTH, 00)
+        self.x += 1
+        return True

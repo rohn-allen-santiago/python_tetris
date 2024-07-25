@@ -3,6 +3,7 @@ A class for each piece.
 A piece consists of exactly 4 blocks.
 Pieces can behave differently in certain situations so they will be differentiated by a switch case.
 """
+from time import time
 from block import *
 
 # Constants
@@ -69,6 +70,7 @@ class Piece:
         self.color = type[1]
         self.orientation = 0
         self.blocks = []
+        self.time = time()
 
     # Draw the piece on the canvas
     def draw(self):
@@ -165,3 +167,22 @@ class Piece:
             block.delete()
         self.blocks.clear()
         return None
+
+    # Determine piece gravity based on player level
+    # The formula for gravity is Time = (0.8-((Level-1)*0.007))^(Level-1)
+    def calc_time(self, level):
+        return pow(0.8 - ((level - 1) * 0.007), (level - 1))
+
+    # Checks if the piece needs to move down by checking time passed
+    def check_update(self, level):
+        currentTime = time()
+        cycleTime = self.time + self.calc_time(level)
+        if not self.can_move_down():
+            return True
+        if currentTime < cycleTime:
+            return False
+        if self.can_move_down():
+            self.move_down()
+            self.time = time()
+            return False
+        return False

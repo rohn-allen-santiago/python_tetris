@@ -84,31 +84,49 @@ class Piece:
             block.draw()
         return None
 
-    # Moves the piece down a position if possible
-    def move_down(self):
+    # Checks if the piece can move down
+    def can_move_down(self):
         for block in self.blocks:
             if not block.can_move_down():
                 return False
+        return True
+
+    # Moves the piece down a position if possible
+    def move_down(self):
+        if not self.can_move_down():
+            return False
         for block in self.blocks:
             block.move_down()
         self.x += 1
         return True
 
+    # Checks if the piece can move down
+    def can_move_left(self):
+        for block in self.blocks:
+             if not block.can_move_left():
+                 return False
+        return True
+
     # Moves the piece left a position if possible
     def move_left(self):
-        for block in self.blocks:
-            if not block.can_move_left():
-                return False
+        if not self.can_move_left():
+            return False
         for block in self.blocks:
             block.move_left()
         self.y -= 1
         return True
 
-    # Moves the piece right a position if possible
-    def move_right(self):
+    # Checks if the piece can move down
+    def can_move_right(self):
         for block in self.blocks:
             if not block.can_move_right():
                 return False
+        return True
+
+    # Moves the piece right a position if possible
+    def move_right(self):
+        if self.can_move_right():
+            return False
         for block in self.blocks:
             block.move_right()
         self.y += 1

@@ -3,6 +3,7 @@ A class for each piece.
 A piece consists of exactly 4 blocks.
 Pieces can behave differently in certain situations so they will be differentiated by a switch case.
 """
+from time import time
 from block import *
 
 # Constants
@@ -69,6 +70,8 @@ class Piece:
         self.color = type[1]
         self.orientation = 0
         self.blocks = []
+        self.time = time()
+        self.isRotating = False
 
     # Draw the piece on the canvas
     def draw(self):
@@ -82,41 +85,73 @@ class Piece:
             self.blocks.append(block)
         for block in self.blocks:
             block.draw()
+        self.isRotating = False
         return None
 
-    # Moves the piece down a position if possible
-    def move_down(self):
+    # Checks if the piece can move down
+    def can_move_down(self):
         for block in self.blocks:
             if not block.can_move_down():
                 return False
+        return True
+
+    # Moves the piece down a position if possible
+    def move_down(self):
+        if not self.can_move_down():
+            return False
         for block in self.blocks:
             block.move_down()
-        self.x += 1
+        self.y += 1
+        return True
+
+    # Checks if the piece can move down
+    def can_move_left(self):
+        for block in self.blocks:
+             if not block.can_move_left():
+                 return False
         return True
 
     # Moves the piece left a position if possible
     def move_left(self):
-        for block in self.blocks:
-            if not block.can_move_left():
-                return False
+        if not self.can_move_left():
+            return False
         for block in self.blocks:
             block.move_left()
-        self.y -= 1
+        self.x -= 1
+        return True
+
+    # Checks if the piece can move down
+    def can_move_right(self):
+        for block in self.blocks:
+            if not block.can_move_right():
+                return False
         return True
 
     # Moves the piece right a position if possible
     def move_right(self):
-        for block in self.blocks:
-            if not block.can_move_right():
-                return False
+        if not self.can_move_right():
+            return False
         for block in self.blocks:
             block.move_right()
-        self.y += 1
+        self.x += 1
         return True
 
     # Rotates the piece clockwise
     def rotate_cw(self):
+        self.isRotating = True
         self.orientation += 1
+        otIndex = (self.type * 4) + (self.orientation % 4)
+        delta = [0, 0]
+        for i in range(3):
+            newPos = (self.x + OT[otIndex][i][0], self.y + OT[otIndex][i][1])
+            if newPos[0] < 0:
+                delta[0] += 1
+            if newPos[0] >= GRID_WIDTH:
+                delta[0] -= 1
+            if newPos[1] >= GRID_HEIGHT:
+                delta[1] -= 1
+        self.x += delta[0]
+        self.y += delta[1]
         self.delete()
         self.draw()
         return None
@@ -124,8 +159,45 @@ class Piece:
     # Rotates the piece counterclockwise
     def rotate_ccw(self):
         self.orientation -= 1
+        otIndex = (self.type * 4) + (self.orientation % 4)
+        delta = [0, 0]
+        for i in range(3):
+            newPos = (self.x + OT[otIndex][i][0], self.y + OT[otIndex][i][1])
+            if newPos[0] < 0:
+                delta[0] += 1
+            if newPos[0] >= GRID_WIDTH:
+                delta[0] -= 1
+            if newPos[1] >= GRID_HEIGHT:
+                delta[1] -= 1
+        self.x += delta[0]
+        self.y += delta[1]
         self.delete()
         self.draw()
+        return None
+
+    # Rotates the piece 180 degrees
+    def rotate_180(self):
+        self.orientation += 2
+        otIndex = (self.type * 4) + (self.orientation % 4)
+        delta = [0, 0]
+        for i in range(3):
+            newPos = (self.x + OT[otIndex][i][0], self.y + OT[otIndex][i][1])
+            if newPos[0] < 0:
+                delta[0] += 1
+            if newPos[0] >= GRID_WIDTH:
+                delta[0] -= 1
+            if newPos[1] >= GRID_HEIGHT:
+                delta[1] -= 1
+        self.x += delta[0]
+        self.y += delta[1]
+        self.delete()
+        self.draw()
+        return None
+
+    # Hard drops the piece, dropping it as far as possible
+    def hard_drop(self):
+        while self.can_move_down():
+            self.move_down()
         return None
 
     # Deletes a piece
@@ -134,3 +206,24 @@ class Piece:
             block.delete()
         self.blocks.clear()
         return None
+
+    # Determine piece gravity based on player level
+    # The formula for gravity is Time = (0.8-((Level-1)*0.007))^(Level-1)
+    def calc_time(self, level):
+        return pow(0.8 - ((level - 1) * 0.007), (level - 1))
+
+    # Checks if the piece needs to move down by checking time passed
+    def check_update(self, level):
+        currentTime = time()
+        cycleTime = self.time + self.calc_time(level)
+        if self.isRotating:
+            return False
+        if currentTime < cycleTime:
+            return False
+        if not self.can_move_down():
+            return True
+        if self.can_move_down():
+            self.move_down()
+            self.time = time()
+            return False
+        return False

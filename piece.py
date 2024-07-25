@@ -97,7 +97,7 @@ class Piece:
             return False
         for block in self.blocks:
             block.move_down()
-        self.x += 1
+        self.y += 1
         return True
 
     # Checks if the piece can move down
@@ -113,7 +113,7 @@ class Piece:
             return False
         for block in self.blocks:
             block.move_left()
-        self.y -= 1
+        self.x -= 1
         return True
 
     # Checks if the piece can move down
@@ -125,11 +125,11 @@ class Piece:
 
     # Moves the piece right a position if possible
     def move_right(self):
-        if self.can_move_right():
+        if not self.can_move_right():
             return False
         for block in self.blocks:
             block.move_right()
-        self.y += 1
+        self.x += 1
         return True
 
     # Rotates the piece clockwise

@@ -177,10 +177,10 @@ class Piece:
     def check_update(self, level):
         currentTime = time()
         cycleTime = self.time + self.calc_time(level)
-        if not self.can_move_down():
-            return True
         if currentTime < cycleTime:
             return False
+        if not self.can_move_down():
+            return True
         if self.can_move_down():
             self.move_down()
             self.time = time()

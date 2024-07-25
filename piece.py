@@ -71,6 +71,7 @@ class Piece:
         self.orientation = 0
         self.blocks = []
         self.time = time()
+        self.isRotating = False
 
     # Draw the piece on the canvas
     def draw(self):
@@ -84,6 +85,7 @@ class Piece:
             self.blocks.append(block)
         for block in self.blocks:
             block.draw()
+        self.isRotating = False
         return None
 
     # Checks if the piece can move down
@@ -136,7 +138,20 @@ class Piece:
 
     # Rotates the piece clockwise
     def rotate_cw(self):
+        self.isRotating = True
         self.orientation += 1
+        otIndex = (self.type * 4) + (self.orientation % 4)
+        delta = [0, 0]
+        for i in range(3):
+            newPos = (self.x + OT[otIndex][i][0], self.y + OT[otIndex][i][1])
+            if newPos[0] < 0:
+                delta[0] += 1
+            if newPos[0] >= GRID_WIDTH:
+                delta[0] -= 1
+            if newPos[1] >= GRID_HEIGHT:
+                delta[1] -= 1
+        self.x += delta[0]
+        self.y += delta[1]
         self.delete()
         self.draw()
         return None
@@ -144,6 +159,18 @@ class Piece:
     # Rotates the piece counterclockwise
     def rotate_ccw(self):
         self.orientation -= 1
+        otIndex = (self.type * 4) + (self.orientation % 4)
+        delta = [0, 0]
+        for i in range(3):
+            newPos = (self.x + OT[otIndex][i][0], self.y + OT[otIndex][i][1])
+            if newPos[0] < 0:
+                delta[0] += 1
+            if newPos[0] >= GRID_WIDTH:
+                delta[0] -= 1
+            if newPos[1] >= GRID_HEIGHT:
+                delta[1] -= 1
+        self.x += delta[0]
+        self.y += delta[1]
         self.delete()
         self.draw()
         return None
@@ -151,6 +178,18 @@ class Piece:
     # Rotates the piece 180 degrees
     def rotate_180(self):
         self.orientation += 2
+        otIndex = (self.type * 4) + (self.orientation % 4)
+        delta = [0, 0]
+        for i in range(3):
+            newPos = (self.x + OT[otIndex][i][0], self.y + OT[otIndex][i][1])
+            if newPos[0] < 0:
+                delta[0] += 1
+            if newPos[0] >= GRID_WIDTH:
+                delta[0] -= 1
+            if newPos[1] >= GRID_HEIGHT:
+                delta[1] -= 1
+        self.x += delta[0]
+        self.y += delta[1]
         self.delete()
         self.draw()
         return None
@@ -177,6 +216,8 @@ class Piece:
     def check_update(self, level):
         currentTime = time()
         cycleTime = self.time + self.calc_time(level)
+        if self.isRotating:
+            return False
         if currentTime < cycleTime:
             return False
         if not self.can_move_down():

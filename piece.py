@@ -153,6 +153,12 @@ class Piece:
         self.draw()
         return None
 
+    # Hard drops the piece, dropping it as far as possible
+    def hard_drop(self):
+        while self.can_move_down():
+            self.move_down()
+        return None
+
     # Deletes a piece
     def delete(self):
         for block in self.blocks:

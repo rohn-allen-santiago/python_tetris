@@ -9,9 +9,12 @@ WINDOW_HEIGHT = 1000
 WINDOW_WIDTH = 1000
 CANVAS_HEIGHT = 1000
 CANVAS_WIDTH = 500
+MAX_LEVEL = 15
+SD_LEVEL = 9
 
 # Globals
-level = 1
+currentLevel = 1
+tempLevel = 1
 
 # Create window and set dimensions
 pt = mtTkinter.Tk()
@@ -35,7 +38,7 @@ for i in range(21):
     canvas.create_line(0, i * BLOCK_WIDTH, 1000, i * BLOCK_WIDTH)
 
 # Select action based on key press
-def input(key):
+def press(key):
     global currentPiece
 
     # Move left
@@ -57,10 +60,19 @@ def input(key):
     if key.char == 'j':
         currentPiece.hard_drop()
     # Soft drop
-    # if key == key.from_char('s'):
+    if key.char == 's':
+        global currentLevel, tempLevel
+        tempLevel = currentLevel
+        if currentLevel < SD_LEVEL:
+            currentLevel = SD_LEVEL
+
+def release(key):
+    if key.char == 's':
+        global currentLevel, tempLevel
+        currentLevel = tempLevel
 
 # Set up listener for registering key presses
-listener = Listener(on_press=input)
+listener = Listener(on_press=press, on_release=release)
 listener.start()
 
 # Testing
@@ -72,4 +84,4 @@ currentPiece = testPiece
 while True:
     pt.update_idletasks()
     pt.update()
-    currentPiece.check_update(level)
+    currentPiece.check_update(currentLevel)

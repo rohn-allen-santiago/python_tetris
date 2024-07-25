@@ -128,6 +128,13 @@ class Piece:
         self.draw()
         return None
 
+    # Rotates the piece 180 degrees
+    def rotate_180(self):
+        self.orientation += 2
+        self.delete()
+        self.draw()
+        return None
+
     # Deletes a piece
     def delete(self):
         for block in self.blocks:
